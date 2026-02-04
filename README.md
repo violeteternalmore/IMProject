@@ -139,3 +139,59 @@ url: jdbc:mysql://localhost:3308/im_db?useSSL=false&serverTimezone=Asia/Shanghai
 
 
 ## Step 3
+
+### 完成了两个简单功能和工程化规范：
+
+#### 1.创建用户
+
+POST http://localhost:18080/users
+
+请求体：
+
+```json
+{
+    "username": "Alice",
+    "password": "12345678"
+}
+```
+
+响应：
+
+```json
+{
+    "code": 200,
+    "message": "success",
+    "data": 1
+}
+```
+
+#### 2.根据id搜索用户
+
+GET http://localhost:18080/users/{id}
+
+响应：
+
+```json
+{
+    "code": 200,
+    "message": "success",
+    "data": {
+        "username": "Alice",
+        "createTime": ""2026-02-04T21:51:45""
+    }
+}
+```
+
+> 使用Apifox，进行接口测试
+
+#### 3.使用统一的返回格式，定义Result类
+
+#### 4.定义BusinessException，并用GlobalExceptionHandler统一处理异常
+
+#### 5.Controller默认success，Service针对异常情况抛出对应异常
+
+#### 6.添加参数校验，在用户创建的时候，用户名和密码不能为空，且有长度要求
+
+#### 7.使用DTO机制，而不是直接将实体作为传输数据
+
+
