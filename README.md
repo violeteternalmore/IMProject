@@ -24,7 +24,7 @@
 
 在用maven配置后端依赖的时候出现下面报错：
 
-![ac3652c2-b13f-42a8-a7aa-041d828788b9](file:///C:/Users/violeteternal/Pictures/Typedown/ac3652c2-b13f-42a8-a7aa-041d828788b9.png)
+![mysql导致的连锁问题](file:///D:/....A_purpose/IMProject/docs/images/step2_mysql_chain_problem.png)
 
 一开始以为是没有配置好镜像源，导致无法下载，实际上是mysql的问题
 
@@ -64,7 +64,7 @@ mvn clean
 > 
 > 这里暂时使用的是SpringBoot 2.x版本，上面处理完后大概会出现很多警告，如下：
 > 
-> ![8dcd37d2-f4c7-4f46-8d31-b1a154d8bf32](file:///C:/Users/violeteternal/Pictures/Typedown/8dcd37d2-f4c7-4f46-8d31-b1a154d8bf32.png)
+> ![mysql问题修复后的警告](file:///D:/....A_purpose/IMProject/docs/images/step2_mysql_fixed_warning.png)
 > 
 > 这些都是已知漏洞，可以考虑更新SpringBoot，使用较新的SpringBoot来避免漏洞和生产实际的黑客攻击。
 
@@ -74,15 +74,17 @@ mvn clean
 
 在写好最小可启动代码后运行，访问网页出现下面问题：
 
-![4b0d06b1-cd63-4345-9420-f6cb91f1f483](file:///C:/Users/violeteternal/Pictures/Typedown/4b0d06b1-cd63-4345-9420-f6cb91f1f483.png)
+![访问网页后的错误](file:///D:/....A_purpose/IMProject/docs/images/step2_mysql_publickey_problem.png)
 
 回去看代码，发现有下面报错：
 
-![bbda2554-38c4-401f-937e-04ba9db6e066](file:///C:/Users/violeteternal/Pictures/Typedown/bbda2554-38c4-401f-937e-04ba9db6e066.png)
+![访问网页错误发生后,程序的报错显示](file:///D:/....A_purpose/IMProject/docs/images/step2_mysql_publickey_server_problem.png)
 
 很明显：Public Key Retrieval is not allowed。这是mysql的问题，密码不允许明文传输，我在application.xml里面有如下配置：
 
-![c4ed3648-687f-4e95-971b-9e47777bdc5e](file:///C:/Users/violeteternal/Pictures/Typedown/c4ed3648-687f-4e95-971b-9e47777bdc5e.png)
+![application.xml配置](file:///D:/....A_purpose/IMProject/docs/images/step2_mysql_publickey_application.png)
+
+
 
 可以看到密码都是指定的，目前阶段，先添加在url中更改为下面字段允许明文密码：
 
@@ -104,9 +106,6 @@ url: jdbc:mysql://localhost:3308/im_db?useSSL=false&serverTimezone=Asia/Shanghai
 > server:
 >   port: xxxx
 > ```
-> 
-> 
-> 
 
 > tips-3:
 > 
@@ -140,23 +139,3 @@ url: jdbc:mysql://localhost:3308/im_db?useSSL=false&serverTimezone=Asia/Shanghai
 
 
 ## Step 3
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
