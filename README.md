@@ -82,7 +82,7 @@ mvn clean
 
 很明显：Public Key Retrieval is not allowed。这是mysql的问题，密码不允许明文传输，我在application.xml里面有如下配置：
 
-![application.xml配置](file:///D:/....A_purpose/IMProject/docs/images/step2_mysql_publickey_application.png)
+![application.xml配置](./docs/images/step2_mysql_publickey_application.png)
 
 
 
