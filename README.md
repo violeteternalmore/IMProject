@@ -24,7 +24,7 @@
 
 在用maven配置后端依赖的时候出现下面报错：
 
-![mysql导致的连锁问题](file:///D:/....A_purpose/IMProject/docs/images/step2_mysql_chain_problem.png)
+![mysql导致的连锁问题](./docs/images/step2_mysql_chain_problem.png)
 
 一开始以为是没有配置好镜像源，导致无法下载，实际上是mysql的问题
 
@@ -64,7 +64,7 @@ mvn clean
 > 
 > 这里暂时使用的是SpringBoot 2.x版本，上面处理完后大概会出现很多警告，如下：
 > 
-> ![mysql问题修复后的警告](file:///D:/....A_purpose/IMProject/docs/images/step2_mysql_fixed_warning.png)
+> ![loading-ag-379](./docs/images/step2_mysql_fixed_warning.png)
 > 
 > 这些都是已知漏洞，可以考虑更新SpringBoot，使用较新的SpringBoot来避免漏洞和生产实际的黑客攻击。
 
@@ -74,11 +74,11 @@ mvn clean
 
 在写好最小可启动代码后运行，访问网页出现下面问题：
 
-![访问网页后的错误](file:///D:/....A_purpose/IMProject/docs/images/step2_mysql_publickey_problem.png)
+![loading-ag-381](./docs/images/step2_mysql_publickey_problem.png)
 
 回去看代码，发现有下面报错：
 
-![访问网页错误发生后,程序的报错显示](file:///D:/....A_purpose/IMProject/docs/images/step2_mysql_publickey_server_problem.png)
+![loading-ag-383](./docs/images/step2_mysql_publickey_server_problem.png)
 
 很明显：Public Key Retrieval is not allowed。这是mysql的问题，密码不允许明文传输，我在application.xml里面有如下配置：
 
