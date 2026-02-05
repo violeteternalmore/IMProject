@@ -195,3 +195,65 @@ GET http://localhost:18080/users/{id}
 #### 7.使用DTO机制，而不是直接将实体作为传输数据
 
 
+
+### Step 4
+
+使用下面一系列命令确保用户名是唯一的：
+
+```sql
+ALTER TABLE user ADD UNIQUE INDEX uk_username (username);
+```
+
+在GlobalExceptionHandler里面添加：
+
+```java
+    @ExceptionHandler(DuplicateKeyException.class)
+    public Result<Void> DuplicateKeyExceptionHandler(DuplicateKeyException e) {
+        return Result.error(400, "用户名已存在");
+    }
+```
+
+最后，在新增用户的服务中，使用wrapper构建条件查询器，做检查
+
+```java
+    public Long addUser(UserReq userReq) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUsername, userReq.getUsername());
+        if (userMapper.selectCount(queryWrapper) > 0) {
+            throw new BusinessException(400, "用户名已存在");
+        }
+        ...
+    }
+```
+
+以上三个层面，保证username的唯一性，用于接下来在登录服务中作为查找用户，验证用户的关键条件。
+
+
+
+添加了登录接口，登录的token使用硬编码的token字符串，下一步考虑实现JWT的token生成
+
+PUT http://localhost:18080/login
+
+请求体：
+
+```json
+{
+    "username": "Alpha",
+    "password": "11111111"
+}
+```
+
+响应：
+
+```json
+{
+    "code": 200,
+    "message": "success",
+    "data": {
+        "token": "Token_temp",
+        "username": "Alpha"
+    }
+}
+```
+
+

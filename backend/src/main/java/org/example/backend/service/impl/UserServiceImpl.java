@@ -1,7 +1,8 @@
 package org.example.backend.service.impl;
 
-import org.example.backend.dto.UserCreateReq;
-import org.example.backend.dto.UserQueryRes;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.example.backend.dto.UserReq;
+import org.example.backend.dto.UserQueryResp;
 import org.example.backend.entity.User;
 import org.example.backend.exception.BusinessException;
 import org.example.backend.mapper.UserMapper;
@@ -18,7 +19,12 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public Long addUser(UserCreateReq userReq) {
+    public Long addUser(UserReq userReq) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUsername, userReq.getUsername());
+        if (userMapper.selectCount(queryWrapper) > 0) {
+            throw new BusinessException(400, "用户名已存在");
+        }
         User user = new User();
         user.setUsername(userReq.getUsername());
         user.setPassword(userReq.getPassword());
@@ -32,15 +38,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserQueryRes selectUserById(Long id) {
+    public UserQueryResp selectUserById(Long id) {
         User user = userMapper.selectById(id);
         if (user != null) {
-            UserQueryRes userRes = new UserQueryRes();
+            UserQueryResp userRes = new UserQueryResp();
             userRes.setUsername(user.getUsername());
             userRes.setCreateTime(user.getCreateTime());
             return userRes;
         } else {
             throw new BusinessException(404, "未查找到此人");
         }
+    }
+
+    @Override
+    public void updateUserById(Long id, UserReq userReq) {
+        User user = userMapper.selectById(id);
+        if (user == null) {
+            throw new BusinessException(404, "未找到该用户");
+        }
+        user.setUsername(userReq.getUsername());
+        user.setPassword(userReq.getPassword());
+        userMapper.updateById(user);
     }
 }
