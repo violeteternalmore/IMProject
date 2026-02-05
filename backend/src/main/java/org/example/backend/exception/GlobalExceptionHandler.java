@@ -3,6 +3,7 @@ package org.example.backend.exception;
 import org.example.backend.common.Result;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -33,6 +34,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateKeyException.class)
     public Result<Void> DuplicateKeyExceptionHandler(DuplicateKeyException e) {
         return Result.error(400, "用户名已存在");
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public Result<Void> MissingRequestHeaderExceptionHandler(MissingRequestHeaderException e) {
+        return Result.error(400, "缺少正确的请求头: " + e.getHeaderName());
     }
 
     @ExceptionHandler(Exception.class)

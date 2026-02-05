@@ -2,9 +2,11 @@
 
 学习一个即时通讯项目
 
-
+---
 
 ## step 1
+
+---
 
 在开发版本仅容器化mysql和redis以解决环境问题，Java的容器化考虑在中后期并入，
 
@@ -12,7 +14,7 @@
 
 同时，持久化保存使用的是bind volume的方式挂载以便于日常开发，后期考虑使用volume的方式进行挂载.
 
-
+---
 
 ## step 2
 
@@ -138,7 +140,11 @@ url: jdbc:mysql://localhost:3308/im_db?useSSL=false&serverTimezone=Asia/Shanghai
 
 
 
+---
+
 ## Step 3
+
+---
 
 ### 完成了两个简单功能和工程化规范：
 
@@ -194,9 +200,13 @@ GET http://localhost:18080/users/{id}
 
 #### 7.使用DTO机制，而不是直接将实体作为传输数据
 
+---
+
+## Step 4
+
+---
 
 
-### Step 4
 
 使用下面一系列命令确保用户名是唯一的：
 
@@ -256,4 +266,58 @@ PUT http://localhost:18080/login
 }
 ```
 
+---
 
+## Step 5
+
+---
+
+1. 实现了redis存储token，来实现登录态（主要写了拦截器，并注册拦截器，写了用户上下文，后续可以直接使用这个上下文得到用户id，同时只放行登录接口，注册接口和健康检查接口可以不用在Request Header中带有token）
+
+2. 实现了登出接口，只是删除当前token，而不是删除用户，意思就是支持多端登录，这是天然的，后续可能会做进一步限制。
+
+3. 注意前后端的Request Header要一致，都采用Authorization来传输token，如果前后端不一致的话，会报MissingRequestHeaderException，这个也在GlobalExceptionHandler里面做了处理
+
+登录接口：
+
+POST http://localhost:18080/login
+
+请求体：
+
+```json
+{
+    "username": "Alice",
+    "password": "12345678"
+}
+```
+
+响应：
+
+```json
+{
+    "code": 200,
+    "message": "success",
+    "data": {
+        "token": "263ef076fe7e40888a3d85bf6399e926",
+        "username": "Alice"
+    }
+}
+```
+
+登出接口：
+
+POST http://localhost:18080/logout
+
+请求头：
+
+Authorization: 263ef076fe7e40888a3d85bf6399e926 (token，采用UUID生成)
+
+响应：
+
+```json
+{
+    "code": 200,
+    "message": "success",
+    "data": null
+}
+```

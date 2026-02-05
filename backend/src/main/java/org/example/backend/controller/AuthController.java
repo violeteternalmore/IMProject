@@ -4,9 +4,7 @@ import org.example.backend.common.Result;
 import org.example.backend.dto.LoginReq;
 import org.example.backend.dto.LoginResp;
 import org.example.backend.service.AuthService;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -17,8 +15,15 @@ public class AuthController {
     @Resource
     private AuthService authService;
 
-    @PutMapping("/login")
+    @PostMapping("/login")
     public Result<LoginResp> login(@Valid @RequestBody LoginReq loginReq) {
         return Result.success(authService.login(loginReq));
     }
+
+    @PostMapping("/logout")
+    public Result<Void> logout(@RequestHeader("Authorization") String token) {
+        authService.logout(token);
+        return Result.success(null);
+    }
+
 }

@@ -5,4 +5,5 @@ import org.example.backend.dto.LoginResp;
 
 public interface AuthService {
     LoginResp login(LoginReq loginReq);
+    void logout(String token);
 }
